@@ -31,17 +31,6 @@ __pycache__/
 *.pyc
 
 # ---------------------------------------------------------------------------
-# Environment Variables & Secrets (CRITICAL: Never commit API keys/passwords)
-# ---------------------------------------------------------------------------
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-*.pem
-*.key
-
-# ---------------------------------------------------------------------------
 # IDEs and Text Editors
 # ---------------------------------------------------------------------------
 # Visual Studio Code
