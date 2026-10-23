@@ -1,0 +1,68 @@
+# ---------------------------------------------------------------------------
+# Compiled Source / Build Artifacts
+# ---------------------------------------------------------------------------
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+bin/
+build/
+dist/
+target/
+
+# ---------------------------------------------------------------------------
+# Packages / Dependencies (Avoid bloating the repository)
+# ---------------------------------------------------------------------------
+node_modules/
+jspm_packages/
+.pnp
+.pnp.js
+*.gem
+log/
+tmp/
+
+# Python virtual environments and caches
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+
+# ---------------------------------------------------------------------------
+# Environment Variables & Secrets (CRITICAL: Never commit API keys/passwords)
+# ---------------------------------------------------------------------------
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+*.key
+
+# ---------------------------------------------------------------------------
+# IDEs and Text Editors
+# ---------------------------------------------------------------------------
+# Visual Studio Code
+.vscode/*
+!.vscode/extensions.json
+.history/
+
+# IntelliJ / WebStorm / PyCharm
+.idea/
+*.iws
+*.iml
+
+# ---------------------------------------------------------------------------
+# Operating System Specific Files
+# ---------------------------------------------------------------------------
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
