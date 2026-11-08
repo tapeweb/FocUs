@@ -7,7 +7,8 @@ export const usersRole = pgTable("usersRole", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   userId: integer()
     .notNull()
-    .references((): AnyPgColumn => usersTable.id),
+    .references((): AnyPgColumn => usersTable.id)
+    .unique(),
   roleId: integer()
     .notNull()
     .references((): AnyPgColumn => rolesTable.id),
