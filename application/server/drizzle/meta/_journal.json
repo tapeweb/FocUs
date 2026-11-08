@@ -8,6 +8,13 @@
       "when": 1794140086358,
       "tag": "0000_typical_jean_grey",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794142502358,
+      "tag": "0001_nappy_kat_farrell",
+      "breakpoints": true
     }
   ]
 }
