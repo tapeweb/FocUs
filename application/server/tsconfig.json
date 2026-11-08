@@ -27,7 +27,7 @@
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false,
 
-    "paths":{
+    "paths": {
       "@/*": ["./source/application/server.ts"]
     }
   }

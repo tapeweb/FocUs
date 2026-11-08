@@ -9,13 +9,7 @@ bun install
 To run:
 
 ```bash
-bun run index.ts
-```
-
-To type check:
-
-```bash
-bun check
+bun dev
 ```
 
 Run `bun fmt` to format the code.

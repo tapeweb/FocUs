@@ -3,16 +3,23 @@
   "module": "source/application/main.ts.ts",
   "type": "module",
   "private": true,
+  "packageManager": "bun@1.2.0а",
   "scripts": {
-    "dev": "bun run --watch source/application/main.ts"
+    "dev": "bun run --watch source/application/main.ts",
+    "database:generate": "bun drizzle-kit generate",
+    "database:migrate": "bun drizzle-kit migrate"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/pg": "^8.23.1"
   },
   "peerDependencies": {
     "typescript": "^7"
   },
   "dependencies": {
-    "elysia": "^1.4.31"
+    "drizzle-kit": "^0.31.11",
+    "drizzle-orm": "^0.45.4",
+    "elysia": "^1.4.31",
+    "pg": "^8.23.1"
   }
 }
