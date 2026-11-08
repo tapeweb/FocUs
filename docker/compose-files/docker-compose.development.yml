@@ -27,6 +27,32 @@ services:
     networks:
       - focus_network
 
+  focus_server:
+    build:
+      context: ../../application/server
+      dockerfile: ../../docker/dockerfiles/Dockerfile.server.${DOCKER_MODE}
+    container_name: ${SERVICE_SERVER_NAME}
+
+    volumes:
+      - ../../application/server:/usr/src/application/server
+      - /usr/src/application/server/node_modules
+
+    environment:
+      SERVICE_SERVER_NAME: ${SERVICE_SERVER_NAME}
+      SERVICE_SERVER_PORT: ${SERVICE_SERVER_PORT}
+      SERVICE_SERVER_URL: ${SERVICE_SERVER_URL}
+      DATABASE_URL: ${DATABASE_URL}
+
+    ports:
+      - "${SERVICE_SERVER_PORT}:3000"
+
+    depends_on:
+      focus_postgres:
+        condition: service_healthy
+
+    networks:
+      - focus_network
+
 volumes:
   focus_postgres_data:
     name: focus_postgres_data

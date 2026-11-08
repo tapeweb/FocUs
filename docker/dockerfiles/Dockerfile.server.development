@@ -1,0 +1,10 @@
+FROM oven/bun:1-slim
+
+WORKDIR /usr/src/application/server
+
+COPY package*.json ./
+RUN ["sh", "-c", "bun init && bun install"]
+
+COPY . .
+
+CMD ["sh", "-c", "bun dev"]
