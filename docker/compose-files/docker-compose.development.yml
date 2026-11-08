@@ -4,8 +4,6 @@ services:
     image: postgres:18-alpine
 
     volumes:
-      # Postgres 18 declares VOLUME /var/lib/postgresql and keeps PGDATA in
-      # /var/lib/postgresql/18/docker — mount the parent, not .../data.
       - focus_postgres_data:/var/lib/postgresql
 
     environment:
@@ -15,7 +13,6 @@ services:
       TZ: UTC
 
     ports:
-      # host:container — override POSTGRES_PORT in .env if 5432 is taken locally
       - "${POSTGRES_PORT}:5432"
 
     healthcheck:
