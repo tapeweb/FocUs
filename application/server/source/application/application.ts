@@ -1,5 +1,7 @@
 import { Elysia } from "elysia";
-import { corsMiddleware } from "../middlewares/cors";
-export const application = new Elysia();
+import { corsMiddleware } from "@/middlewares/cors";
+import { roles } from "@/modules/roles";
 
-application.use(corsMiddleware);
+export const application = new Elysia().use(corsMiddleware).use(roles);
+
+export type App = typeof application;

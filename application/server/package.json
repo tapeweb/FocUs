@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "bun run --watch source/application/main.ts",
     "database:generate": "bun drizzle-kit generate",
-    "database:migrate": "bun drizzle-kit migrate"
+    "database:migrate": "bun drizzle-kit migrate",
+    "database:seed": "bun run source/database/seeds/roles.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",
