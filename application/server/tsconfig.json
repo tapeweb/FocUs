@@ -28,7 +28,7 @@
     "noPropertyAccessFromIndexSignature": false,
 
     "paths": {
-      "@/*": ["./source/application/server.ts"]
+      "@/*": ["./source/*"]
     }
   }
 }
