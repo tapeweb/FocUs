@@ -3,7 +3,7 @@ import { usersTable } from "./users";
 import { rolesTable } from "./roles";
 import * as table from "drizzle-orm/pg-core";
 
-export const usersRole = pgTable("usersRole", {
+export const usersRoleTable = pgTable("usersRole", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   userId: integer()
     .notNull()

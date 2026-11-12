@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1794140086358,
-      "tag": "0000_typical_jean_grey",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1794142502358,
-      "tag": "0001_nappy_kat_farrell",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1794167854019,
-      "tag": "0002_crazy_mimic",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1794228942911,
-      "tag": "0003_high_emma_frost",
+      "when": 1794479726284,
+      "tag": "0000_safe_chameleon",
       "breakpoints": true
     }
   ]

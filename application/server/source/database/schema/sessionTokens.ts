@@ -6,7 +6,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { usersTable } from "./users";
 
-export const sessionTokens = pgTable("sessionTokens", {
+export const sessionTokensTable = pgTable("sessionTokens", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   userId: integer()
     .notNull()
