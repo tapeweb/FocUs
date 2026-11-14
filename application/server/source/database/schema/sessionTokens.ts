@@ -10,7 +10,7 @@ export const sessionTokensTable = pgTable("sessionTokens", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   userId: integer()
     .notNull()
-    .references((): AnyPgColumn => usersTable.id)
+    .references(() => usersTable.id)
     .unique(),
   token: varchar({ length: 255 }).notNull().unique(),
 });

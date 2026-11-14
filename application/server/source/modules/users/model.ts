@@ -51,5 +51,3 @@ export const UserModel = {
 export type UserModel = {
   [k in keyof typeof UserModel]: UnwrapSchema<(typeof UserModel)[k]>;
 };
-
-export type AuthHeaders = { authorization: string };

@@ -3,7 +3,6 @@ import type { UserModel } from "./model";
 import { usersTable } from "@/database/schema/users";
 import { eq, or } from "drizzle-orm";
 import { status } from "elysia";
-import { generateSessionToken } from "@/utils/generateSessionToken";
 import { sessionTokensTable } from "@/database/schema/sessionTokens";
 import { rolesTable } from "@/database/schema/roles";
 import { usersRoleTable } from "@/database/schema/usersRole";
