@@ -4,17 +4,6 @@ import { ArchiveTask } from "./service";
 import { extractToken } from "@/utils/extractTokenFromHeaders";
 
 export const archiveTask = new Elysia({ prefix: "/archiveTask" })
-  .post(
-    "/cerate",
-    async ({ headers, body }) => {
-      const token = await extractToken(headers.authorization);
-      await ArchiveTask.create(token, { id: body.id });
-    },
-    {
-      headers: ArchiveTaskModel["bearerAuth"],
-      body: ArchiveTaskModel["create"],
-    },
-  )
   .get(
     "/selectById",
     async ({ headers, query, status }) => {
@@ -44,25 +33,29 @@ export const archiveTask = new Elysia({ prefix: "/archiveTask" })
     },
     {
       headers: ArchiveTaskModel["bearerAuth"],
-      body: ArchiveTaskModel["create"],
+      body: ArchiveTaskModel["selectByUserId"],
     },
   )
-  .patch(
-    "/delete",
+  .post(
+    "/sendToDeleted",
     async ({ headers, query }) => {
       const token = await extractToken(headers.authorization);
-      await ArchiveTask.delete(token, { id: Number(query.id) });
+      await ArchiveTask.sendToDeleted(token, {
+        id: Number(query.id),
+      });
     },
     {
       headers: ArchiveTaskModel["bearerAuth"],
-      body: ArchiveTaskModel["delete"],
+      body: ArchiveTaskModel["sendToDeleted"],
     },
   )
   .post(
     "/restore",
     async ({ headers, query }) => {
       const token = await extractToken(headers.authorization);
-      await ArchiveTask.delete(token, { id: Number(query.id) });
+      await ArchiveTask.restore(token, {
+        id: Number(query.id),
+      });
     },
     {
       headers: ArchiveTaskModel["bearerAuth"],

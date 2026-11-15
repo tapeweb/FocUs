@@ -36,7 +36,7 @@ export const ActiveTaskModel = {
     ),
   }),
 
-  delete: t.Object({
+  sendToArchive: t.Object({
     id: t.Number(),
   }),
 

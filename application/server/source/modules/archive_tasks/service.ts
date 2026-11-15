@@ -8,42 +8,6 @@ import { activeTasksTable } from "@/database/schema/activeTasks";
 import { archiveTasksTable } from "@/database/schema/archiveTasks";
 
 export abstract class ArchiveTask {
-  static async create(
-    token: string,
-    { id }: ArchiveTaskModel["create"],
-    client: DatabaseClient = database,
-  ) {
-    const [existingToken] = await client
-      .select({
-        userId: sessionTokensTable.userId,
-      })
-      .from(sessionTokensTable)
-      .where(eq(sessionTokensTable.token, token));
-
-    if (!existingToken) return status(404, "Not Found");
-
-    const [existingUser] = await client
-      .select()
-      .from(usersTable)
-      .where(eq(usersTable.id, existingToken.userId));
-
-    if (!existingUser) return status(404, "Not Found");
-
-    const [existingTask] = await client
-      .select()
-      .from(activeTasksTable)
-      .where(eq(activeTasksTable.id, id));
-
-    if (!existingTask) return status(404, "Not Found");
-
-    await client.insert(archiveTasksTable).values({
-      userId: existingTask.userId,
-      title: existingTask.title,
-      description: existingTask.description,
-      createdAt: existingTask.createdAt,
-    });
-  }
-
   static async selectById(
     token: string,
     { id }: ArchiveTaskModel["selectById"],
@@ -102,9 +66,9 @@ export abstract class ArchiveTask {
     return existingArchiveTasks;
   }
 
-  static async delete(
+  static async sendToDeleted(
     token: string,
-    { id }: ArchiveTaskModel["create"],
+    { id }: ArchiveTaskModel["sendToDeleted"],
     client: DatabaseClient = database,
   ) {
     const [existingToken] = await client

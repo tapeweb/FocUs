@@ -62,14 +62,14 @@ export const activeTask = new Elysia({ prefix: "/activeTask" })
       body: ActiveTaskModel["update"],
     },
   )
-  .delete(
-    "/delete",
+  .post(
+    "/sendToArchive",
     async ({ headers, query }) => {
       const token = await extractToken(headers.authorization);
-      await ActiveTask.delete(token, { id: Number(query.id) });
+      await ActiveTask.sendToArchive(token, { id: Number(query.id) });
     },
     {
       headers: ActiveTaskModel["bearerAuth"],
-      query: ActiveTaskModel["delete"],
+      query: ActiveTaskModel["sendToArchive"],
     },
   );

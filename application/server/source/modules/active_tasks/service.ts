@@ -5,6 +5,7 @@ import { count, eq } from "drizzle-orm";
 import { status } from "elysia";
 import { usersTable } from "@/database/schema/users";
 import { activeTasksTable } from "@/database/schema/activeTasks";
+import { archiveTasksTable } from "@/database/schema/archiveTasks";
 
 export abstract class ActiveTask {
   static async create(
@@ -117,9 +118,9 @@ export abstract class ActiveTask {
       .where(eq(activeTasksTable.id, id));
   }
 
-  static async delete(
+  static async sendToArchive(
     token: string,
-    { id }: ActiveTaskModel["delete"],
+    { id }: ActiveTaskModel["sendToArchive"],
     client: DatabaseClient = database,
   ) {
     const [existingToken] = await client
@@ -136,6 +137,24 @@ export abstract class ActiveTask {
 
     if (!existingUser) return status(404, "Not Found");
 
-    await client.delete(activeTasksTable).where(eq(activeTasksTable.id, id));
+    const [existingTask] = await client
+      .select()
+      .from(activeTasksTable)
+      .where(eq(activeTasksTable.id, id));
+
+    if (!existingTask) return status(404, "Not Found");
+
+    await client.transaction(async (transaction) => {
+      await transaction.insert(archiveTasksTable).values({
+        userId: existingTask.userId,
+        title: existingTask.title,
+        description: existingTask.description,
+        createdAt: existingTask.createdAt,
+      });
+
+      await transaction
+        .delete(activeTasksTable)
+        .where(eq(activeTasksTable.id, existingTask.id));
+    });
   }
 }

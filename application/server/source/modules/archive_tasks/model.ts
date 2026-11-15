@@ -14,10 +14,6 @@ const bearerAuth = t.Object({
 });
 
 export const ArchiveTaskModel = {
-  create: t.Object({
-    id: t.Number(),
-  }),
-
   selectById: t.Object({
     id: t.Number(),
   }),
@@ -26,7 +22,7 @@ export const ArchiveTaskModel = {
     userId: t.Number(),
   }),
 
-  delete: t.Object({
+  sendToDeleted: t.Object({
     id: t.Number(),
   }),
 
