@@ -1,0 +1,10 @@
+FROM oven/bun:1-slim
+
+WORKDIR /usr/src/Application/Server
+
+COPY package*.json bun.lock ./
+RUN ["sh", "-c", "bun install"]
+
+COPY . .
+
+CMD ["sh", "-c", "bun run start:docker"]

@@ -1,0 +1,64 @@
+services:
+  focus_postgres:
+    container_name: ${POSTGRES_HOST}
+    image: postgres:18-alpine
+
+    volumes:
+      - focus_postgres_data:/var/lib/postgresql
+
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      TZ: UTC
+
+    ports:
+      - "${POSTGRES_PORT}:5432"
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+    restart: unless-stopped
+
+    networks:
+      - focus_network
+
+  focus_server:
+    build:
+      context: ../../Application/Server
+      dockerfile: ../../Docker/Dockerfiles/Dockerfile.Server.${DOCKER_MODE}
+    container_name: ${SERVICE_SERVER_NAME}
+
+    volumes:
+      - ../../Application/Server:/usr/src/Application/Server
+      - /usr/src/Application/Server/node_modules
+
+    environment:
+      SERVICE_SERVER_NAME: ${SERVICE_SERVER_NAME}
+      SERVICE_SERVER_PORT: ${SERVICE_SERVER_PORT}
+      SERVICE_SERVER_URL: ${SERVICE_SERVER_URL}
+      DATABASE_URL: ${DATABASE_URL}
+      CORS_ORIGIN: ${CORS_ORIGIN}
+
+    ports:
+      - "${SERVICE_SERVER_PORT}:3000"
+
+    depends_on:
+      focus_postgres:
+        condition: service_healthy
+
+    networks:
+      - focus_network
+
+volumes:
+  focus_postgres_data:
+    name: focus_postgres_data
+
+networks:
+  focus_network:
+    name: ${DOCKER_NETWORK_NAME}
+    driver: bridge

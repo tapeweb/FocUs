@@ -1,0 +1,477 @@
+{
+  "id": "4e3e338d-b0a3-4d5c-93b1-18dd92bc2963",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.DeletedTask": {
+      "name": "DeletedTask",
+      "schema": "",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "UserId": {
+          "name": "UserId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Title": {
+          "name": "Title",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Description": {
+          "name": "Description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ArchivedAt": {
+          "name": "ArchivedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "DeletedAt": {
+          "name": "DeletedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "DeletedTask_UserId_Users_Id_fk": {
+          "name": "DeletedTask_UserId_Users_Id_fk",
+          "tableFrom": "DeletedTask",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.SessionTokens": {
+      "name": "SessionTokens",
+      "schema": "",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "SessionTokens_Id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "UserId": {
+          "name": "UserId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Token": {
+          "name": "Token",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "SessionTokens_UserId_Users_Id_fk": {
+          "name": "SessionTokens_UserId_Users_Id_fk",
+          "tableFrom": "SessionTokens",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "SessionTokens_UserId_unique": {
+          "name": "SessionTokens_UserId_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "UserId"
+          ]
+        },
+        "SessionTokens_Token_unique": {
+          "name": "SessionTokens_Token_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Token"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.UsersRole": {
+      "name": "UsersRole",
+      "schema": "",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "UsersRole_Id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "UserId": {
+          "name": "UserId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "RoleId": {
+          "name": "RoleId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "UsersRole_UserId_Users_Id_fk": {
+          "name": "UsersRole_UserId_Users_Id_fk",
+          "tableFrom": "UsersRole",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "UsersRole_RoleId_Roles_Id_fk": {
+          "name": "UsersRole_RoleId_Roles_Id_fk",
+          "tableFrom": "UsersRole",
+          "tableTo": "Roles",
+          "columnsFrom": [
+            "RoleId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "UsersRole_UserId_unique": {
+          "name": "UsersRole_UserId_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "UserId"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.Roles": {
+      "name": "Roles",
+      "schema": "",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "Roles_Id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "RoleName": {
+          "name": "RoleName",
+          "type": "RolesEnum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "Roles_RoleName_unique": {
+          "name": "Roles_RoleName_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "RoleName"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.ArchivedTask": {
+      "name": "ArchivedTask",
+      "schema": "",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "UserId": {
+          "name": "UserId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Title": {
+          "name": "Title",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Description": {
+          "name": "Description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "CreatedAt": {
+          "name": "CreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ArchivedAt": {
+          "name": "ArchivedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ArchivedTask_UserId_Users_Id_fk": {
+          "name": "ArchivedTask_UserId_Users_Id_fk",
+          "tableFrom": "ArchivedTask",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.ActiveTask": {
+      "name": "ActiveTask",
+      "schema": "",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "UserId": {
+          "name": "UserId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Title": {
+          "name": "Title",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Description": {
+          "name": "Description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "CreatedAt": {
+          "name": "CreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ActiveTask_UserId_Users_Id_fk": {
+          "name": "ActiveTask_UserId_Users_Id_fk",
+          "tableFrom": "ActiveTask",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.Users": {
+      "name": "Users",
+      "schema": "",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "Users_Id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "Username": {
+          "name": "Username",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Email": {
+          "name": "Email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "HashedPassword": {
+          "name": "HashedPassword",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "CreatedAt": {
+          "name": "CreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "Users_Username_unique": {
+          "name": "Users_Username_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Username"
+          ]
+        },
+        "Users_Email_unique": {
+          "name": "Users_Email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Email"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.RolesEnum": {
+      "name": "RolesEnum",
+      "schema": "public",
+      "values": [
+        "user",
+        "admin"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
