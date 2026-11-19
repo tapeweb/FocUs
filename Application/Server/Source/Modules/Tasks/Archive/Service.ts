@@ -86,7 +86,7 @@ export abstract class ArchiveTaskService {
     if (!ExistingToken) return status(401, "Unauthorized");
 
     await Client.transaction(async (Transaction) => {
-      const [ExistingUser] = await Client.select()
+      const [ExistingUser] = await Transaction.select()
         .from(UsersTable)
         .where(eq(UsersTable.Id, ExistingToken.UserId))
         .for("update");
@@ -113,7 +113,10 @@ export abstract class ArchiveTaskService {
 
       if (!ExistingActiveTasks) return Transaction.rollback();
 
-      if (ExistingActiveTasks.Count >= 3) return status(409, "Conflict");
+      if (ExistingActiveTasks.Count >= 3) {
+        Transaction.rollback();
+        return status(409, "Conflict");
+      }
 
       await Transaction.insert(ActiveTaskTable)
         .values({

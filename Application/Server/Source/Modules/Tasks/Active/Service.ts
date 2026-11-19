@@ -20,7 +20,7 @@ export abstract class ActiveTaskService {
     if (!ExistingToken) return status(401, "Unauthorized");
 
     await Client.transaction(async (Transaction) => {
-      const [ExistingUser] = await Client.select()
+      const [ExistingUser] = await Transaction.select()
         .from(UsersTable)
         .where(eq(UsersTable.Id, ExistingToken.UserId))
         .for("update");
@@ -34,8 +34,8 @@ export abstract class ActiveTaskService {
       if (!CountableTasks) return true;
 
       if (CountableTasks.Count >= 3) {
-        status(409, "Conflict");
-        return Transaction.rollback();
+        Transaction.rollback();
+        return status(409, "Conflict");
       }
 
       await Client.insert(ActiveTaskTable).values({
@@ -126,15 +126,15 @@ export abstract class ActiveTaskService {
     if (!ExistingUser) return status(404, "Not Found");
 
     await Client.transaction(async (Transaction) => {
-      const [ExistingTask] = await Transaction
-      .select()
+      const [ExistingTask] = await Transaction.select()
         .from(ActiveTaskTable)
         .where(
           and(
             eq(ActiveTaskTable.UserId, ExistingUser.Id),
             eq(ActiveTaskTable.Id, Id),
           ),
-        );
+        )
+        .for("update");
 
       if (!ExistingTask) return Transaction.rollback();
 
