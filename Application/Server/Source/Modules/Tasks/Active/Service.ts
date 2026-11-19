@@ -27,18 +27,15 @@ export abstract class ActiveTaskService {
 
       if (!ExistingUser) return Transaction.rollback();
 
-      const [CountableTasks] = await Client.select({ Count: count() })
+      const [CountableTasks] = await Transaction.select({ Count: count() })
         .from(ActiveTaskTable)
         .where(eq(ActiveTaskTable.UserId, ExistingUser.Id));
 
       if (!CountableTasks) return true;
 
-      if (CountableTasks.Count >= 3) {
-        Transaction.rollback();
-        return status(409, "Conflict");
-      }
+      if (CountableTasks.Count >= 3) return Transaction.rollback();
 
-      await Client.insert(ActiveTaskTable).values({
+      await Transaction.insert(ActiveTaskTable).values({
         UserId: ExistingUser.Id,
         Title,
         Description,
