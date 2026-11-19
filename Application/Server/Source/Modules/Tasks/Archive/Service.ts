@@ -113,10 +113,7 @@ export abstract class ArchiveTaskService {
 
       if (!ExistingActiveTasks) return Transaction.rollback();
 
-      if (ExistingActiveTasks.Count >= 3) {
-        Transaction.rollback();
-        return status(409, "Conflict");
-      }
+      if (ExistingActiveTasks.Count >= 3) return Transaction.rollback();
 
       await Transaction.insert(ActiveTaskTable)
         .values({
