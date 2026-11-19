@@ -19,25 +19,30 @@ export abstract class ActiveTaskService {
 
     if (!ExistingToken) return status(401, "Unauthorized");
 
-    const [ExistingUser] = await Client.select()
-      .from(UsersTable)
-      .where(eq(UsersTable.Id, ExistingToken.UserId))
-      .for("update");
+    await Client.transaction(async (Transaction) => {
+      const [ExistingUser] = await Client.select()
+        .from(UsersTable)
+        .where(eq(UsersTable.Id, ExistingToken.UserId))
+        .for("update");
 
-    if (!ExistingUser) return status(404, "Not Found");
+      if (!ExistingUser) return Transaction.rollback();
 
-    const [CountableTasks] = await Client.select({ Count: count() })
-      .from(ActiveTaskTable)
-      .where(eq(ActiveTaskTable.UserId, ExistingUser.Id));
+      const [CountableTasks] = await Client.select({ Count: count() })
+        .from(ActiveTaskTable)
+        .where(eq(ActiveTaskTable.UserId, ExistingUser.Id));
 
-    if (!CountableTasks) return true;
+      if (!CountableTasks) return true;
 
-    if (CountableTasks.Count >= 3) return status(409, "Conflict");
+      if (CountableTasks.Count >= 3) {
+        status(409, "Conflict");
+        return Transaction.rollback();
+      }
 
-    await Client.insert(ActiveTaskTable).values({
-      UserId: ExistingUser.Id,
-      Title,
-      Description,
+      await Client.insert(ActiveTaskTable).values({
+        UserId: ExistingUser.Id,
+        Title,
+        Description,
+      });
     });
   }
 
@@ -121,7 +126,8 @@ export abstract class ActiveTaskService {
     if (!ExistingUser) return status(404, "Not Found");
 
     await Client.transaction(async (Transaction) => {
-      const [ExistingTask] = await Client.select()
+      const [ExistingTask] = await Transaction
+      .select()
         .from(ActiveTaskTable)
         .where(
           and(
