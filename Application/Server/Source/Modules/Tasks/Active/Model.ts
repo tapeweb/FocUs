@@ -32,8 +32,8 @@ export const ActiveTaskModel = {
     Id: t.Number(),
   }),
 
-  taskResponse: TaskResponseSchema,
-  tasksResponse: t.Array(TaskResponseSchema),
+  TaskResponse: TaskResponseSchema,
+  TasksResponse: t.Array(TaskResponseSchema),
 
   BearerAuth,
 };
