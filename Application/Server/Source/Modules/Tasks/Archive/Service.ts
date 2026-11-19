@@ -6,6 +6,7 @@ import { status } from "elysia";
 import { UsersTable } from "@/Database/Schema/UserRelation/Users";
 import { ArchiveTaskTable } from "@/Database/Schema/Tasks/ArchiveTask";
 import { ActiveTaskTable } from "@/Database/Schema/Tasks/ActiveTask";
+import { DeleteTaskTable } from "@/Database/Schema/Tasks/DeleteTask";
 
 export abstract class ArchiveTaskService {
   static async SelectById(
@@ -162,6 +163,15 @@ export abstract class ArchiveTaskService {
         .for("update");
 
       if (!ExistingTask) return Transaction.rollback();
+
+      await Transaction.insert(DeleteTaskTable)
+        .values({
+          UserId: ExistingTask.UserId,
+          Title: ExistingTask.Title,
+          Description: ExistingTask.Description,
+          ArchivedAt: ExistingTask.ArchivedAt,
+        })
+        .returning();
 
       await Transaction.delete(ArchiveTaskTable).where(
         and(
