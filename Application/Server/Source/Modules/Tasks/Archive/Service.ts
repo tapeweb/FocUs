@@ -60,7 +60,7 @@ export abstract class ArchiveTaskService {
 
     if (!ExistingUser) return status(404, "Not Found");
 
-    const [ExistingTasks] = await Client.select()
+    const ExistingTasks = await Client.select()
       .from(ArchiveTaskTable)
       .where(
         and(
@@ -68,8 +68,6 @@ export abstract class ArchiveTaskService {
           eq(ArchiveTaskTable.UserId, ExistingUser.Id),
         ),
       );
-
-    if (!ExistingTasks) return status(404, "Not Found");
 
     return status(200, ExistingTasks);
   }
@@ -79,22 +77,22 @@ export abstract class ArchiveTaskService {
     { Id }: ArchiveTaskModel["Restore"],
     Client: DatabaseClient = Database,
   ) {
+    const [ExistingToken] = await Client.select({
+      UserId: SessionTokensTable.UserId,
+    })
+      .from(SessionTokensTable)
+      .where(eq(SessionTokensTable.Token, Token));
+
+    if (!ExistingToken) return status(401, "Unauthorized");
+
+    const [ExistingUser] = await Client.select()
+      .from(UsersTable)
+      .where(eq(UsersTable.Id, ExistingToken.UserId))
+      .for("update");
+
+    if (!ExistingUser) return status(404, "Not Found");
+
     await Client.transaction(async (Transaction) => {
-      const [ExistingToken] = await Transaction.select({
-        UserId: SessionTokensTable.UserId,
-      })
-        .from(SessionTokensTable)
-        .where(eq(SessionTokensTable.Token, Token));
-
-      if (!ExistingToken) return Transaction.rollback();
-
-      const [ExistingUser] = await Transaction.select()
-        .from(UsersTable)
-        .where(eq(UsersTable.Id, ExistingToken.UserId))
-        .for("update");
-
-      if (!ExistingUser) return Transaction.rollback();
-
       const [ExistingTasks] = await Transaction.select()
         .from(ArchiveTaskTable)
         .where(
@@ -102,8 +100,7 @@ export abstract class ArchiveTaskService {
             eq(ArchiveTaskTable.Id, Id),
             eq(ArchiveTaskTable.UserId, ExistingUser.Id),
           ),
-        )
-        .for("update");
+        );
 
       if (!ExistingTasks) return Transaction.rollback();
 
@@ -115,7 +112,10 @@ export abstract class ArchiveTaskService {
 
       if (!ExistingActiveTasks) return Transaction.rollback();
 
-      if (ExistingActiveTasks.Count >= 3) return Transaction.rollback();
+      if (ExistingActiveTasks.Count >= 3) {
+        status(409, "Conflict");
+        return Transaction.rollback();
+      }
 
       await Transaction.insert(ActiveTaskTable)
         .values({

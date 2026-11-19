@@ -56,7 +56,12 @@ export abstract class UserRelationService {
       CreatedAt: UsersTable.CreatedAt,
     })
       .from(UsersTable)
-      .where(and(eq(UsersTable.Username, Username), eq(UsersTable.Id, Id)));
+      .where(
+        and(
+          eq(UsersTable.Username, Username),
+          eq(UsersTable.Id, ExistingUserByUserId.Id),
+        ),
+      );
 
     if (!ExistingUser) return status(404, "Not Found");
 

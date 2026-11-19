@@ -11,7 +11,6 @@ const TaskResponseSchema = t.Object({
   Title: t.String(),
   Description: t.String(),
   CreatedAt: t.String(),
-  ArchivedAt: t.String(),
 });
 
 const BearerAuth = t.Object({

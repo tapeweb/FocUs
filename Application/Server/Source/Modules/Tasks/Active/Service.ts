@@ -21,7 +21,8 @@ export abstract class ActiveTaskService {
 
     const [ExistingUser] = await Client.select()
       .from(UsersTable)
-      .where(eq(UsersTable.Id, ExistingToken.UserId));
+      .where(eq(UsersTable.Id, ExistingToken.UserId))
+      .for("update");
 
     if (!ExistingUser) return status(404, "Not Found");
 
@@ -57,7 +58,7 @@ export abstract class ActiveTaskService {
 
     if (!ExistingUser) return status(404, "Not Found");
 
-    const [ExistingTask] = await Client.select({ Count: count() })
+    const [ExistingTask] = await Client.select()
       .from(ActiveTaskTable)
       .where(
         and(
@@ -88,7 +89,7 @@ export abstract class ActiveTaskService {
 
     if (!ExistingUser) return status(404, "Not Found");
 
-    const [ExistingTasks] = await Client.select()
+    const ExistingTasks = await Client.select()
       .from(ActiveTaskTable)
       .where(
         and(
@@ -119,18 +120,18 @@ export abstract class ActiveTaskService {
 
     if (!ExistingUser) return status(404, "Not Found");
 
-    const [ExistingTask] = await Client.select()
-      .from(ActiveTaskTable)
-      .where(
-        and(
-          eq(ActiveTaskTable.UserId, ExistingUser.Id),
-          eq(ActiveTaskTable.Id, Id),
-        ),
-      );
-
-    if (!ExistingTask) return status(404, "Not Found");
-
     await Client.transaction(async (Transaction) => {
+      const [ExistingTask] = await Client.select()
+        .from(ActiveTaskTable)
+        .where(
+          and(
+            eq(ActiveTaskTable.UserId, ExistingUser.Id),
+            eq(ActiveTaskTable.Id, Id),
+          ),
+        );
+
+      if (!ExistingTask) return Transaction.rollback();
+
       await Transaction.insert(ArchiveTaskTable).values({
         UserId: ExistingTask.UserId,
         Title: ExistingTask.Title,
@@ -141,9 +142,9 @@ export abstract class ActiveTaskService {
       await Transaction.delete(ActiveTaskTable).where(
         and(
           eq(ActiveTaskTable.UserId, ExistingUser.Id),
-          eq(ArchiveTaskTable.Id, Id),
+          eq(ActiveTaskTable.Id, Id),
         ),
       );
     });
-  } 
+  }
 }
