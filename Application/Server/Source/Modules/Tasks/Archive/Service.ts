@@ -143,14 +143,14 @@ export abstract class ArchiveTaskService {
         .from(SessionTokensTable)
         .where(eq(SessionTokensTable.Token, Token));
 
-      if (!ExistingToken) return Transaction.rollback();
+      if (!ExistingToken) return;
 
       const [ExistingUser] = await Transaction.select()
         .from(UsersTable)
         .where(eq(UsersTable.Id, ExistingToken.UserId))
         .for("update");
 
-      if (!ExistingUser) return Transaction.rollback();
+      if (!ExistingUser) return;
 
       const [ExistingTask] = await Transaction.select()
         .from(ArchiveTaskTable)
@@ -162,7 +162,7 @@ export abstract class ArchiveTaskService {
         )
         .for("update");
 
-      if (!ExistingTask) return Transaction.rollback();
+      if (!ExistingTask) return;
 
       await Transaction.insert(DeleteTaskTable)
         .values({
