@@ -14,6 +14,10 @@ export const DeleteTask = new Elysia({ prefix: "/DeleteTask" }).get(
   {
     headers: DeleteTaskModel["BearerAuth"],
     query: DeleteTaskModel["SelectById"],
-    response: { 200: DeleteTaskModel["TaskResponse"], 404: t.String() },
+    response: {
+      200: DeleteTaskModel["TaskResponse"],
+      404: t.String(),
+      401: t.String(),
+    },
   },
 );
